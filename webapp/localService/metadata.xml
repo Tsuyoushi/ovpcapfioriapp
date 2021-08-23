@@ -1,0 +1,463 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:sap="http://www.sap.com/Protocols/SAPData">
+    <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Capabilities.V1.xml" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Alias="Capabilities" Namespace="Org.OData.Capabilities.V1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/Common.xml" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Alias="Common" Namespace="com.sap.vocabularies.Common.v1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Core.V1.xml" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Alias="Core" Namespace="Org.OData.Core.V1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Measures.V1.xml" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Alias="Measures" Namespace="Org.OData.Measures.V1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/UI.xml" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Alias="UI" Namespace="com.sap.vocabularies.UI.v1"/>
+    </edmx:Reference>
+    <edmx:DataServices m:DataServiceVersion="2.0">
+        <Schema Namespace="capService" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+            <EntityContainer Name="EntityContainer" m:IsDefaultEntityContainer="true">
+                <EntitySet Name="SalesOrder" EntityType="capService.SalesOrder"/>
+                <EntitySet Name="SalesHistory" EntityType="capService.SalesHistory"/>
+                <EntitySet Name="SalesPerSupplier" EntityType="capService.SalesPerSupplier"/>
+            </EntityContainer>
+            <EntityType Name="SalesOrder">
+                <Key>
+                    <PropertyRef Name="salesOrder"/>
+                </Key>
+                <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="createdBy" Type="Edm.String" MaxLength="255"/>
+                <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="modifiedBy" Type="Edm.String" MaxLength="255"/>
+                <Property Name="salesOrder" Type="Edm.String" MaxLength="5" Nullable="false"/>
+                <Property Name="customerCompanyName" Type="Edm.String" MaxLength="40"/>
+                <Property Name="revenueInLocalCurrency" Type="Edm.String" MaxLength="30"/>
+                <Property Name="localCurrency" Type="Edm.String" MaxLength="30"/>
+                <Property Name="numberOfItems" Type="Edm.String" MaxLength="60"/>
+            </EntityType>
+            <EntityType Name="SalesHistory">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="creationMonthAsDate" Type="Edm.DateTimeOffset"/>
+                <Property Name="creationMonth" Type="Edm.String" MaxLength="2"/>
+                <Property Name="creationMonth_Text" Type="Edm.String" MaxLength="10"/>
+                <Property Name="grossAmountInCompanyCurrency" Type="Edm.Decimal" Scale="3" Precision="16"/>
+                <Property Name="companyCurrency" Type="Edm.String" MaxLength="5"/>
+                <Property Name="companyCurrency_Text" Type="Edm.String" MaxLength="40"/>
+                <Property Name="referenceAmount" Type="Edm.Int32"/>
+            </EntityType>
+            <EntityType Name="SalesPerSupplier">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="createdBy" Type="Edm.String" MaxLength="255"/>
+                <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="modifiedBy" Type="Edm.String" MaxLength="255"/>
+                <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="supplier" Type="Edm.String" MaxLength="10"/>
+                <Property Name="supplierName" Type="Edm.String" MaxLength="80"/>
+                <Property Name="grossAmountInCompanyCurrency" Type="Edm.Decimal" Scale="3" Precision="16"/>
+                <Property Name="netUnitPriceInCompanyCurrency" Type="Edm.Decimal" Scale="3" Precision="16"/>
+                <Property Name="quantity" Type="Edm.Decimal" Scale="3" Precision="13"/>
+                <Property Name="companyCurrency" Type="Edm.String" MaxLength="5"/>
+                <Property Name="quantityUnit" Type="Edm.String" MaxLength="3"/>
+                <Property Name="companyCurrencyShortName" Type="Edm.String" MaxLength="15"/>
+                <Property Name="quantityUnitName" Type="Edm.String" MaxLength="10"/>
+            </EntityType>
+            <Annotations Target="capService.SalesOrder" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="UI.SelectionFields">
+                    <Collection>
+                        <PropertyPath>salesOrder</PropertyPath>
+                        <PropertyPath>customerCompanyName</PropertyPath>
+                        <PropertyPath>numberOfItems</PropertyPath>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="UI.SelectionVariant">
+                    <Record Type="UI.SelectionVariantType">
+                        <PropertyValue Property="SelectOptions">
+                            <Collection>
+                                <Record Type="UI.SelectOptionType">
+                                    <PropertyValue Property="PropertyName" PropertyPath="localCurrency"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="capService.EntityContainer/SalesOrder" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="UI.SelectionVariant">
+                    <Record Type="UI.SelectionVariantType">
+                        <PropertyValue Property="SelectOptions">
+                            <Collection>
+                                <Record Type="UI.SelectOptionType">
+                                    <PropertyValue Property="PropertyName" PropertyPath="localCurrency"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="capService.SalesOrder/createdAt" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="UI.Hidden" Bool="true"/>
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="Core.Immutable" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Common.Label" String="Created On"/>
+            </Annotations>
+            <Annotations Target="capService.SalesOrder/createdBy" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="UI.Hidden" Bool="true"/>
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="Core.Immutable" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Core.Description" String="User's unique ID"/>
+                <Annotation Term="Common.Label" String="Created By"/>
+            </Annotations>
+            <Annotations Target="capService.SalesOrder/modifiedAt" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="UI.Hidden" Bool="true"/>
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Common.Label" String="Changed On"/>
+            </Annotations>
+            <Annotations Target="capService.SalesOrder/modifiedBy" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="UI.Hidden" Bool="true"/>
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Core.Description" String="User's unique ID"/>
+                <Annotation Term="Common.Label" String="Changed By"/>
+            </Annotations>
+            <Annotations Target="capService.SalesOrder/salesOrder" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Sales Order ID"/>
+            </Annotations>
+            <Annotations Target="capService.SalesOrder/customerCompanyName" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Company Name"/>
+            </Annotations>
+            <Annotations Target="capService.SalesOrder/revenueInLocalCurrency" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Gross Amount"/>
+            </Annotations>
+            <Annotations Target="capService.SalesOrder/localCurrency" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Currency Code"/>
+            </Annotations>
+            <Annotations Target="capService.SalesOrder/numberOfItems" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Number of Items"/>
+            </Annotations>
+            <Annotations Target="capService.SalesHistory" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="UI.Chart" Qualifier="Line">
+                    <Record Type="UI.ChartDefinitionType">
+                        <PropertyValue Property="ChartType" EnumMember="UI.ChartType/Line"/>
+                        <PropertyValue Property="Description" String="Line Chart"/>
+                        <PropertyValue Property="Measures">
+                            <Collection>
+                                <PropertyPath>grossAmountInCompanyCurrency</PropertyPath>
+                            </Collection>
+                        </PropertyValue>
+                        <PropertyValue Property="MeasureAttributes">
+                            <Collection>
+                                <Record Type="UI.ChartMeasureAttributeType">
+                                    <PropertyValue Property="Measure" PropertyPath="grossAmountInCompanyCurrency"/>
+                                    <PropertyValue Property="Role" EnumMember="UI.ChartMeasureRoleType/Axis1"/>
+                                    <PropertyValue Property="DataPoint" AnnotationPath="@UI.DataPoint#GrossAmountInCompanyCurrency"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                        <PropertyValue Property="Dimensions">
+                            <Collection>
+                                <PropertyPath>creationMonth</PropertyPath>
+                            </Collection>
+                        </PropertyValue>
+                        <PropertyValue Property="DimensionAttributes">
+                            <Collection>
+                                <Record Type="UI.ChartDimensionAttributeType">
+                                    <PropertyValue Property="Dimension" PropertyPath="creationMonth"/>
+                                    <PropertyValue Property="Role" EnumMember="UI.ChartDimensionRoleType/Category"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="UI.PresentationVariant" Qualifier="Line">
+                    <Record Type="UI.PresentationVariantType">
+                        <PropertyValue Property="Visualizations">
+                            <Collection>
+                                <AnnotationPath>@UI.Chart#Line</AnnotationPath>
+                            </Collection>
+                        </PropertyValue>
+                        <PropertyValue Property="MaxItems" Int="3"/>
+                        <PropertyValue Property="IncludeGrandTotal" Bool="true"/>
+                        <PropertyValue Property="SortOrder">
+                            <Collection>
+                                <Record Type="Common.SortOrderType">
+                                    <PropertyValue Property="Descending" Bool="true"/>
+                                    <PropertyValue Property="Property" PropertyPath="creationMonthAsDate"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="UI.DataPoint" Qualifier="GrossAmountInCompanyCurrency">
+                    <Record Type="UI.DataPointType">
+                        <PropertyValue Property="Value" Path="grossAmountInCompanyCurrency"/>
+                        <PropertyValue Property="Title" String="Revenue"/>
+                        <PropertyValue Property="CriticalityCalculation">
+                            <Record Type="UI.CriticalityCalculationType">
+                                <PropertyValue Property="ImprovementDirection" EnumMember="UI.ImprovementDirectionType/Maximize"/>
+                                <PropertyValue Property="DeviationRangeHighValue" Int="1000000"/>
+                                <PropertyValue Property="DeviationRangeLowValue" Int="3000000"/>
+                            </Record>
+                        </PropertyValue>
+                        <PropertyValue Property="TrendCalculation">
+                            <Record Type="UI.TrendCalculationType">
+                                <PropertyValue Property="ReferenceValue" Path="referenceAmount"/>
+                                <PropertyValue Property="UpDifference" Decimal="10"/>
+                                <PropertyValue Property="StrongUpDifference" Decimal="100"/>
+                                <PropertyValue Property="DownDifference" Decimal="-10"/>
+                                <PropertyValue Property="StrongDownDifference" Decimal="-100"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Capabilities.DeleteRestrictions">
+                    <Record Type="Capabilities.DeleteRestrictionsType">
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Capabilities.InsertRestrictions">
+                    <Record Type="Capabilities.InsertRestrictionsType">
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Capabilities.UpdateRestrictions">
+                    <Record Type="Capabilities.UpdateRestrictionsType">
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="capService.EntityContainer/SalesHistory" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="UI.PresentationVariant" Qualifier="Line">
+                    <Record Type="UI.PresentationVariantType">
+                        <PropertyValue Property="Visualizations">
+                            <Collection>
+                                <AnnotationPath>@UI.Chart#Line</AnnotationPath>
+                            </Collection>
+                        </PropertyValue>
+                        <PropertyValue Property="MaxItems" Int="3"/>
+                        <PropertyValue Property="IncludeGrandTotal" Bool="true"/>
+                        <PropertyValue Property="SortOrder">
+                            <Collection>
+                                <Record Type="Common.SortOrderType">
+                                    <PropertyValue Property="Descending" Bool="true"/>
+                                    <PropertyValue Property="Property" PropertyPath="creationMonthAsDate"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Capabilities.DeleteRestrictions">
+                    <Record Type="Capabilities.DeleteRestrictionsType">
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Capabilities.InsertRestrictions">
+                    <Record Type="Capabilities.InsertRestrictionsType">
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Capabilities.UpdateRestrictions">
+                    <Record Type="Capabilities.UpdateRestrictionsType">
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="capService.SalesHistory/ID" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Core.Computed" Bool="true"/>
+            </Annotations>
+            <Annotations Target="capService.SalesHistory/creationMonthAsDate" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Creation Date"/>
+            </Annotations>
+            <Annotations Target="capService.SalesHistory/creationMonth" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Month"/>
+            </Annotations>
+            <Annotations Target="capService.SalesHistory/creationMonth_Text" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.QuickInfo" String="Month Long text"/>
+                <Annotation Term="Common.Label" String="Month"/>
+            </Annotations>
+            <Annotations Target="capService.SalesHistory/grossAmountInCompanyCurrency" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Revenue"/>
+            </Annotations>
+            <Annotations Target="capService.SalesHistory/companyCurrency" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Measures.ISOCurrency" String="Currency"/>
+                <Annotation Term="Common.Label" String="Currency"/>
+            </Annotations>
+            <Annotations Target="capService.SalesHistory/companyCurrency_Text" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Long text"/>
+            </Annotations>
+            <Annotations Target="capService.SalesHistory/referenceAmount" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Amount"/>
+            </Annotations>
+            <Annotations Target="capService.SalesPerSupplier" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="UI.Chart" Qualifier="donut">
+                    <Record Type="UI.ChartDefinitionType">
+                        <PropertyValue Property="ChartType" EnumMember="UI.ChartType/Donut"/>
+                        <PropertyValue Property="Description" String="Donut Chart"/>
+                        <PropertyValue Property="Measures">
+                            <Collection>
+                                <PropertyPath>grossAmountInCompanyCurrency</PropertyPath>
+                            </Collection>
+                        </PropertyValue>
+                        <PropertyValue Property="MeasureAttributes">
+                            <Collection>
+                                <Record Type="UI.ChartMeasureAttributeType">
+                                    <PropertyValue Property="Measure" PropertyPath="grossAmountInCompanyCurrency"/>
+                                    <PropertyValue Property="Role" EnumMember="UI.ChartMeasureRoleType/Axis1"/>
+                                    <PropertyValue Property="DataPoint" AnnotationPath="@UI.DataPoint#GrossAmountInCompanyCurrency"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                        <PropertyValue Property="Dimensions">
+                            <Collection>
+                                <PropertyPath>supplier</PropertyPath>
+                            </Collection>
+                        </PropertyValue>
+                        <PropertyValue Property="DimensionAttributes">
+                            <Collection>
+                                <Record Type="UI.ChartDimensionAttributeType">
+                                    <PropertyValue Property="Dimension" PropertyPath="supplier"/>
+                                    <PropertyValue Property="Role" EnumMember="UI.ChartDimensionRoleType/Category"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="UI.PresentationVariant" Qualifier="donutPreVar">
+                    <Record Type="UI.PresentationVariantType">
+                        <PropertyValue Property="Visualizations">
+                            <Collection>
+                                <AnnotationPath>@UI.Chart#donut</AnnotationPath>
+                            </Collection>
+                        </PropertyValue>
+                        <PropertyValue Property="MaxItems" Int="3"/>
+                        <PropertyValue Property="IncludeGrandTotal" Bool="true"/>
+                        <PropertyValue Property="SortOrder">
+                            <Collection>
+                                <Record Type="Common.SortOrderType">
+                                    <PropertyValue Property="Descending" Bool="true"/>
+                                    <PropertyValue Property="Property" PropertyPath="grossAmountInCompanyCurrency"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="UI.DataPoint" Qualifier="GrossAmountInCompanyCurrency">
+                    <Record Type="UI.DataPointType">
+                        <PropertyValue Property="Value" Path="grossAmountInCompanyCurrency"/>
+                        <PropertyValue Property="Title" String="Revenue"/>
+                        <PropertyValue Property="CriticalityCalculation">
+                            <Record Type="UI.CriticalityCalculationType">
+                                <PropertyValue Property="ImprovementDirection" EnumMember="UI.ImprovementDirectionType/Maximize"/>
+                                <PropertyValue Property="DeviationRangeHighValue" Int="1000000"/>
+                                <PropertyValue Property="DeviationRangeLowValue" Int="3000000"/>
+                            </Record>
+                        </PropertyValue>
+                        <PropertyValue Property="TrendCalculation">
+                            <Record Type="UI.TrendCalculationType">
+                                <PropertyValue Property="ReferenceValue" Int="1000"/>
+                                <PropertyValue Property="UpDifference" Decimal="10"/>
+                                <PropertyValue Property="StrongUpDifference" Decimal="100"/>
+                                <PropertyValue Property="DownDifference" Decimal="-10"/>
+                                <PropertyValue Property="StrongDownDifference" Decimal="-100"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="UI.Identification">
+                    <Collection>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="grossAmountInCompanyCurrency"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="capService.EntityContainer/SalesPerSupplier" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="UI.PresentationVariant" Qualifier="donutPreVar">
+                    <Record Type="UI.PresentationVariantType">
+                        <PropertyValue Property="Visualizations">
+                            <Collection>
+                                <AnnotationPath>@UI.Chart#donut</AnnotationPath>
+                            </Collection>
+                        </PropertyValue>
+                        <PropertyValue Property="MaxItems" Int="3"/>
+                        <PropertyValue Property="IncludeGrandTotal" Bool="true"/>
+                        <PropertyValue Property="SortOrder">
+                            <Collection>
+                                <Record Type="Common.SortOrderType">
+                                    <PropertyValue Property="Descending" Bool="true"/>
+                                    <PropertyValue Property="Property" PropertyPath="grossAmountInCompanyCurrency"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="capService.SalesPerSupplier/createdAt" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="Core.Immutable" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Common.Label" String="Created On"/>
+            </Annotations>
+            <Annotations Target="capService.SalesPerSupplier/createdBy" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="Core.Immutable" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Core.Description" String="User's unique ID"/>
+                <Annotation Term="Common.Label" String="Created By"/>
+            </Annotations>
+            <Annotations Target="capService.SalesPerSupplier/modifiedAt" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Common.Label" String="Changed On"/>
+            </Annotations>
+            <Annotations Target="capService.SalesPerSupplier/modifiedBy" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Core.Description" String="User's unique ID"/>
+                <Annotation Term="Common.Label" String="Changed By"/>
+            </Annotations>
+            <Annotations Target="capService.SalesPerSupplier/ID" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Common.Label" String="Supplier"/>
+            </Annotations>
+            <Annotations Target="capService.SalesPerSupplier/supplier" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Business Partner ID"/>
+            </Annotations>
+            <Annotations Target="capService.SalesPerSupplier/supplierName" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Supplier"/>
+            </Annotations>
+            <Annotations Target="capService.SalesPerSupplier/grossAmountInCompanyCurrency" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Revenue"/>
+            </Annotations>
+            <Annotations Target="capService.SalesPerSupplier/netUnitPriceInCompanyCurrency" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Average Item Price"/>
+            </Annotations>
+            <Annotations Target="capService.SalesPerSupplier/quantity" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Number of Sold Items"/>
+            </Annotations>
+            <Annotations Target="capService.SalesPerSupplier/companyCurrency" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="ISO Currency Code"/>
+                <Annotation Term="Common.IsUpperCase" Bool="true"/>
+            </Annotations>
+            <Annotations Target="capService.SalesPerSupplier/quantityUnit" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Unit of Measure"/>
+            </Annotations>
+            <Annotations Target="capService.SalesPerSupplier/companyCurrencyShortName" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Short text"/>
+            </Annotations>
+            <Annotations Target="capService.SalesPerSupplier/quantityUnitName" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Label" String="Measuremt unit text"/>
+                <Annotation Term="Common.QuickInfo" String="Unit of Measurement Text (Maximum 10 Characters)"/>
+            </Annotations>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>
