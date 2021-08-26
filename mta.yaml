@@ -1,0 +1,103 @@
+_schema-version: "3.2"
+ID: ovpcapfiori
+description: A Fiori application.
+version: 0.0.1
+modules:
+- name: ovpcapfiori-dest-content
+  type: com.sap.application.content
+  requires:
+  - name: ovpcapfiori-dest-srv
+    parameters:
+      content-target: true
+  - name: ovpcapfiori-repo-host
+    parameters:
+      service-key:
+        name: ovpcapfiori-repo-host-key
+  - name: ovpcapfe-uaa
+    parameters:
+      service-key:
+        name: ovpcapfe-uaa-key
+  parameters:
+    content:
+      subaccount:
+        destinations:
+        - Name: ovpcapfiori_repo_host
+          ServiceInstanceName: ovpcapfiori-html5-srv
+          ServiceKeyName: ovpcapfiori-repo-host-key
+          sap.cloud.service: ovpcapfiori
+        - Authentication: OAuth2UserTokenExchange
+          Name: ovpcapfiori_uaa
+          ServiceInstanceName: ovpcapfe-uaa
+          ServiceKeyName: ovpcapfe-uaa-key
+          sap.cloud.service: ovpcapfiori
+        existing_destinations_policy: update
+  build-parameters:
+    no-source: true
+- name: ovpcapfiori-app-content
+  type: com.sap.application.content
+  path: .
+  requires:
+  - name: ovpcapfiori-repo-host
+    parameters:
+      content-target: true
+  build-parameters:
+    build-result: resources
+    requires:
+    - artifacts:
+      - ovpcapfiori.zip
+      name: ovpcapfiori
+      target-path: resources/
+- name: ovpcapfiori
+  type: html5
+  path: .
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+resources:
+- name: ovpcapfiori-dest-srv
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      HTML5Runtime_enabled: true
+      init_data:
+        subaccount:
+          existing_destinations_policy: update
+          destinations:
+          - Name: V2
+            Description: Odata v2 OVP
+            Authentication: NoAuthentication
+            ProxyType: Internet
+            Type: HTTP
+            URL: https://ac0ac54etrial-dev-ovpcapfe-srv.cfapps.us10.hana.ondemand.com
+            HTML5.DynamicDestination: true
+            forwardAuthToken: true
+        instance:
+          destinations:
+          - Authentication: NoAuthentication
+            Name: ui5
+            ProxyType: Internet
+            Type: HTTP
+            URL: https://ui5.sap.com
+          existing_destinations_policy: update
+      version: 1.0.0
+    service: destination
+    service-name: ovpcapfiori-dest-srv
+    service-plan: lite
+- name: ovpcapfe-uaa
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: xsuaa
+    service-plan: application
+- name: ovpcapfiori-repo-host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-name: ovpcapfiori-html5-srv
+    service-plan: app-host
+parameters:
+  deploy_mode: html5-repo
+  enable-parallel-deployments: true
